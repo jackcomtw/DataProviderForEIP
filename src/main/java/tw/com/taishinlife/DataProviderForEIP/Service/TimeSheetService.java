@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -41,11 +42,14 @@ public class TimeSheetService {
     @Value("${ps}")
     private String password;
 
+    @Autowired
+    private ProcessService processService;
+
     final SimpleDateFormat dataTimeFormat  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     final SimpleDateFormat dataFormat  = new SimpleDateFormat("yyyy/MM/dd");
 
     //秒 分 時 日 月 周
-    @Scheduled(cron="0 0/3 8,9,18,19 ? * MON-SAT")
+    //@Scheduled(cron="0 0/3 8,9,18,19 ? * MON-SAT")
     //@Scheduled(cron="* * * * * *")
     public void main() throws ParseException {
         Assert.notNull(user,"沒有帳號");
@@ -62,6 +66,16 @@ public class TimeSheetService {
             }
         }
         log.info("GoodBye");
+    }
+
+    //秒 分 時 日 月 周
+    @Scheduled(cron="0 0 8,17 * * ?")
+    public void update(){
+        processService.runCommand(
+                new ProcessBuilder().command(
+                        "cmd.exe", "/c",
+                        "git fetch --all && git checkout origin/master -- holiday.json" )
+        );
     }
 
 
