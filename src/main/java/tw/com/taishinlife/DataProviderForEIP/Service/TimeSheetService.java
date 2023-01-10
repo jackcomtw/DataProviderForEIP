@@ -49,7 +49,7 @@ public class TimeSheetService {
     final SimpleDateFormat dataFormat  = new SimpleDateFormat("yyyy/MM/dd");
 
     //秒 分 時 日 月 周
-    //@Scheduled(cron="0 0/3 8,9,18,19 ? * MON-SAT")
+    @Scheduled(cron="0 0/3 8,9,18,19 ? * MON-SAT")
     //@Scheduled(cron="* * * * * *")
     public void main() throws ParseException {
         Assert.notNull(user,"沒有帳號");
