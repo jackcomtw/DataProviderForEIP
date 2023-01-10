@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+us: '@username@'
+ps: '@password@'
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.openfeign: TRACE
+  config: classpath:logback-spring.xml
