@@ -49,8 +49,13 @@ public class TimeSheetService {
     final SimpleDateFormat dataFormat  = new SimpleDateFormat("yyyy/MM/dd");
 
     //秒 分 時 日 月 周
+//    @Scheduled(cron="0 0/10 6,7,8,15,16,17 * * *")
+//    public void test() {
+//        System.out.println("test" + new Date().toString());
+//    }
+
+    //秒 分 時 日 月 周
     @Scheduled(cron="0 0/3 8,9,18,19 ? * MON-SAT")
-    //@Scheduled(cron="* * * * * *")
     public void main() throws ParseException {
         Assert.notNull(user,"沒有帳號");
         Assert.notNull(password,"沒有密碼");
@@ -69,7 +74,7 @@ public class TimeSheetService {
     }
 
     //秒 分 時 日 月 周
-    @Scheduled(cron="0 0 8,17 * * ?")
+    @Scheduled(cron="0 0/10 6,7,8,9,15,16,17,18 * * *")
     public void update(){
         processService.runCommand(
                 new ProcessBuilder().command(
