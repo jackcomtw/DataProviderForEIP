@@ -32,6 +32,7 @@ public class ProcessService {
                         .collect(Collectors.joining());
 
         log.info("執行指令 : {}",command);
+        log.warn("update holiday",command);
 
         Process process = processBuilder.start();
 

@@ -60,21 +60,29 @@ public class TimeSheetService {
         Assert.notNull(user,"沒有帳號");
         Assert.notNull(password,"沒有密碼");
         log.info("Hi~~~ user:{},pw:{}",user,password);
+        log.warn("- - - - - - - - - - - - - - - - - ");
         List<String> list = getCheckTime();
         Calendar currentTime = Calendar.getInstance();
         currentTime.setTime(dataTimeFormat.parse(list.get(0)));
         if (checkWorkDay(currentTime)){
             if (checkCheckTime(list)) {
                 waitTime();
-                log.info("時間到了，準備打卡");
-                setCheckTime();
+                log.warn("ready");
+                if (setCheckTime()) {
+                    log.warn("check in");
+                }
+            }else{
+                log.warn("time is not up yet");
             }
+        }else{
+            log.warn("today is not workDay");
         }
         log.info("GoodBye");
+        log.warn("- - - - - - - - - - - - - - - - - ");
     }
 
     //秒 分 時 日 月 周
-    @Scheduled(cron="0 0/10 6,7,8,9,15,16,17,18 * * *")
+    @Scheduled(cron="0 0/10 6,7,8,9,10,11,12,13,14,15,16,17,18 * * *")
     public void update(){
         processService.runCommand(
                 new ProcessBuilder().command(
@@ -137,13 +145,14 @@ public class TimeSheetService {
         checkInTime_End.set(Calendar.SECOND ,00);
 
         //checkInTime+9hr~19:00
+        //檢查早上打卡時間
         if (checkInTime != null && checkInTime.get(Calendar.HOUR_OF_DAY) >= 9) {
-            //早上九點以後打卡
+            //早上九點以後打卡，工作時數必須滿9小時，之後打卡
             checkOutTime_Begin = checkInTime;
             checkOutTime_Begin.add(Calendar.HOUR_OF_DAY,9);
             checkOutTime_Begin.add(Calendar.MINUTE,5);
         }else {
-            //早上九點之前打卡
+            //早上九點之前打卡，18:00就可以打卡
             checkOutTime_Begin.set(Calendar.HOUR_OF_DAY, 18);
             checkOutTime_Begin.set(Calendar.MINUTE, 00);
             checkOutTime_Begin.set(Calendar.SECOND, 00);
@@ -173,7 +182,8 @@ public class TimeSheetService {
 
     @SneakyThrows
     public boolean  setCheckTime() {
-        log.info("*****************setCheckTime begin*******************");
+        log.info("*******************************************************");
+        log.info("*****************setCheckTime begin *******************");
         URI uri = new URI(getUrl());
         Map<String,String> header = getHeader();
         Map<String,String> cookies = cookiesCache.get(uri.getHost());
@@ -191,6 +201,8 @@ public class TimeSheetService {
                 .execute();
 
         log.info("setCheckTime respance: {},{}",respance.statusCode(), respance.body());
+        log.info("*****************setCheckTime end *********************");
+        log.info("*******************************************************");
 
         return respance.statusCode()==200?true:false;
     }
@@ -208,7 +220,7 @@ public class TimeSheetService {
     private void waitTime() {
         //休息33~120秒
         int sec = RandomUtils.nextInt(33,120);
-
+        log.warn("sleep {} sec", sec);
         log.info("{} will sleep {} sec", Thread.currentThread().getName() , sec);
         long nextFreezeEnd = System.currentTimeMillis() + (sec * 1000);
         while (System.currentTimeMillis() < nextFreezeEnd) {
