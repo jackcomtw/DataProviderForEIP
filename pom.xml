@@ -85,16 +85,16 @@
 		</dependency>
 
 
-		<!-- Cobol 400 -->
-		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>jcc</artifactId>
-			<scope>runtime</scope>
+		<!-- JNA -->
+		<dependency> <!-- JNA dependency -->
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>5.13.0</version>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.jt400</groupId>
-			<artifactId>jt400</artifactId>
-			<version>10.7</version>
+		<dependency> <!-- JNA dependency -->
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.13.0</version>
 		</dependency>
 
 		<dependency>

@@ -35,10 +35,14 @@
         </encoder>
     </appender>
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="FILE" />
     </root>
-    <logger name = "tw.com.taishinlife.DataProviderForEIP" level="warn">
+
+    <logger name = "tw.com.taishinlife.DataProviderForEIP" level="INFO">
+        <appender-ref ref="FILE" />
+    </logger>
+    <logger name = "tw.com.taishinlife.DataProviderForEIP" level="WARN">
         <appender-ref ref="STDOUT" />
     </logger>
 </configuration>
